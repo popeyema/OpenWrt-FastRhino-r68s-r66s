@@ -18,4 +18,4 @@
 echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
 
 # 添加第三方软件包
-git clone https://github.com/haiibo/openwrt-packages package/openwrt-packages
+#git clone https://github.com/haiibo/openwrt-packages package/openwrt-packages
