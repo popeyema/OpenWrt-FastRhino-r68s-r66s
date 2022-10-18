@@ -11,4 +11,5 @@
 #
 
 # Modify default IP
-sed -i 's/192.168.1.1/192.168.1.10/g' package/base-files/files/bin/config_generate
+sed -i 's/192.168.1.1/192.168.1.252/g' package/base-files/files/bin/config_generate     # 定制默认IP
+sed -i 's/PATCHVER:=5.19/PATCHVER:=5.15/g' target/linux/x86/Makefile                   # linux机型,默认内核5.19，修改内核为5.15
