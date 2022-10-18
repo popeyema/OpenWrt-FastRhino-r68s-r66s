@@ -24,21 +24,20 @@ A template for building OpenWrt with GitHub Actions
 
 ## Credits
 
-- [Microsoft Azure](https://azure.microsoft.com)
-- [GitHub Actions](https://github.com/features/actions)
-- [OpenWrt](https://github.com/openwrt/openwrt)
-- [Lean's OpenWrt](https://github.com/coolsnowwolf/lede)
-- [tmate](https://github.com/tmate-io/tmate)
-- [mxschmitt/action-tmate](https://github.com/mxschmitt/action-tmate)
-- [csexton/debugger-action](https://github.com/csexton/debugger-action)
-- [Cowtransfer](https://cowtransfer.com)
-- [WeTransfer](https://wetransfer.com/)
-- [Mikubill/transfer](https://github.com/Mikubill/transfer)
-- [softprops/action-gh-release](https://github.com/softprops/action-gh-release)
-- [ActionsRML/delete-workflow-runs](https://github.com/ActionsRML/delete-workflow-runs)
-- [dev-drprasad/delete-older-releases](https://github.com/dev-drprasad/delete-older-releases)
-- [peter-evans/repository-dispatch](https://github.com/peter-evans/repository-dispatch)
+# OpenWrt-AutoBuild
+
+#### 基于OpenWrt-Actions-Lean+Lienol-自动化在线编译脚本  
+
+  
+
+##### 源码和脚本来自
+
+- [Lean](https://github.com/coolsnowwolf/lede)
+- [ Lienol](https://github.com/Lienol/openwrt )
+- [ xiaorouji package](https://github.com/xiaorouji/openwrt-passwall)
+- [P3TERX](https://github.com/P3TERX/Actions-OpenWrt)
+- [281677160](https://github.com/281677160)
 
 ## License
 
-[MIT](https://github.com/P3TERX/Actions-OpenWrt/blob/main/LICENSE) © [**P3TERX**](https://p3terx.com)
+ [Lean](https://github.com/coolsnowwolf/lede) [MIT](https://github.com/P3TERX/Actions-OpenWrt/blob/main/LICENSE) © [**P3TERX**](https://p3terx.com)
