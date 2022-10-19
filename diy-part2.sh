@@ -11,5 +11,9 @@
 #
 
 # Modify default IP
-sed -i 's/192.168.1.1/192.168.1.252/g' package/base-files/files/bin/config_generate     # 定制默认IP
-sed -i 's/PATCHVER:=5.19/PATCHVER:=5.15/g' target/linux/x86/Makefile                   # linux机型,默认内核5.19，修改内核为5.15
+sed -i 's/192.168.1.1/192.168.1.252/g' package/base-files/files/bin/config_generate   # 定制默认IP
+
+# Themes
+git clone --depth 1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon
+git clone --depth 1 https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
+
