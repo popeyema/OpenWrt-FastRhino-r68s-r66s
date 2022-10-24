@@ -144,6 +144,7 @@ jobs:
         touch release.txt
         echo "后台地址：192.168.1.252" >> release.txt
         echo "::set-output name=status::success"
+
     - name: Upload firmware to release
       uses: softprops/action-gh-release@v1
       if: steps.tag.outputs.status == 'success' && !cancelled()
