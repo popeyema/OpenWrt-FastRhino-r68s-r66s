@@ -10,7 +10,7 @@
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
 #修改默认IP
-sed -i 's/192.168.1.1/192.168.1.252/g' package/base-files/files/bin/config_generate   # 定制默认IP
+# sed -i 's/192.168.1.1/192.168.1.252/g' package/base-files/files/bin/config_generate   # 定制默认IP
 
 # 移除重复软件包
 rm -rf feeds/luci/themes/luci-theme-argon
