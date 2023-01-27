@@ -19,4 +19,4 @@ echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.co
 
 # 添加第三方软件包
 git clone https://github.com/kenzok8/openwrt-packages.git package/openwrt-packages
-
+git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git
