@@ -142,7 +142,7 @@ jobs:
         echo "::set-output name=release_tag::$(date +"%Y.%m.%d")-Lean3"
         echo "::set-output name=release_date::$(date +"%Y.%m.%d")"
         touch release.txt
-        echo "后台地址：192.168.1.252" >> release.txt
+        echo "后台地址：192.168.1.1" >> release.txt
         echo "::set-output name=status::success"
 
     - name: Upload firmware to release
