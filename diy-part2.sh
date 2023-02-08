@@ -16,11 +16,8 @@
 # rm -rf feeds/luci/themes/luci-theme-argon
 
 # Themes
-git clone --depth=1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon
-git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config
-rm -rf ../../customfeeds/luci/themes/luci-theme-argon
-rm -rf ./luci-theme-argon/htdocs/luci-static/argon/img/bg1.jpg
-cp -f $GITHUB_WORKSPACE/data/bg1.jpg luci-theme-argon/htdocs/luci-static/argon/img/bg1.jpg
+# git clone --depth=1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon
+# git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config
 
 # 添加额外软件包
 # git clone --depth 1 https://github.com/kongfl888/luci-app-adguardhome package/luci-app-adguardhome
