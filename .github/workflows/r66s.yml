@@ -139,10 +139,11 @@ jobs:
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        echo "release_tag=$(date +"%Y.%m.%d")-Lean1" >> $GITHUB_OUTPUT
+        echo "release_tag=$(date +"%Y.%m.%d")-Lean" >> $GITHUB_OUTPUT
         echo "release_date=$(date +"%Y.%m.%d")" >> $GITHUB_OUTPUT
         touch release.txt
-        echo "后台地址：192.168.1.1" >> release.txt
+        echo "后台地址：192.168.1.1" 
+              密码：password >> release.txt
         echo "status=success" >> $GITHUB_OUTPUT
     
     - name: Upload firmware to release
@@ -151,7 +152,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
       with:
-        name: ${{ steps.tag.outputs.release_date }} FastRhino-R66S-linux-正式版
+        name: ${{ steps.tag.outputs.release_date }} FastRhino-R66S-linux-固件下载
         tag_name: ${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
         files: ${{ env.FIRMWARE }}/*
