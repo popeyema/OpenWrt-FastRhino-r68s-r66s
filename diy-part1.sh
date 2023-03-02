@@ -15,6 +15,7 @@
 
 # 执行命令来切换6.0内核
 # sed -i 's/5.4/5.15/g' ./target/linux/rockchip/Makefile
+sed -i 's/PATCHVER:=5.15/PATCHVER:=5.10/g' target/linux/rockchip/Makefile
 
 
 # Add a feed source
