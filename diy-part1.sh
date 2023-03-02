@@ -1,5 +1,5 @@
 #!/bin/bash
-#
+# =================================================================
 # Copyright (c) 2019-2020 P3TERX <https://p3terx.com>
 #
 # This is free software, licensed under the MIT License.
@@ -8,17 +8,13 @@
 # https://github.com/P3TERX/Actions-OpenWrt
 # File name: diy-part1.sh
 # Description: OpenWrt DIY script part 1 (Before Update feeds)
-#
+# =================================================================
 
-# Uncomment a feed source
-#sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
-
-# 执行命令来切换6.0内核
-# sed -i 's/5.4/5.15/g' ./target/linux/rockchip/Makefile
+# 执行命令来切换内核
+#sed -i 's/5.4/5.15/g' ./target/linux/rockchip/Makefile
 sed -i 's/PATCHVER:=5.15/PATCHVER:=5.10/g' target/linux/rockchip/Makefile
 
-
-# Add a feed source
+# 添加软件源
 echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
 echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
 echo 'src-git kenzo https://github.com/kenzok8/openwrt-packages' >>feeds.conf.default
