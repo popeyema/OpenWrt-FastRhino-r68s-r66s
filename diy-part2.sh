@@ -26,3 +26,7 @@ git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/lea
 
 
 # 科学上网插件依赖
+
+# 修复缺少nfs_ssc.ko的内核模块
+cp -f $GITHUB_WORKSPACE /general/003-add-module_supported_device-macro.patch target/linux/generic/backport-5.15
+cp -f $GITHUB_WORKSPACE /general/netdevices.mk package/kernel/linux/modules
