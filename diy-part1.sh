@@ -12,7 +12,7 @@
 
 # 执行命令来切换内核
 #sed -i 's/5.4/5.15/g' ./target/linux/rockchip/Makefile
-sed -i 's/PATCHVER:=5.15/PATCHVER:=5.10/g' target/linux/rockchip/Makefile
+#sed -i 's/PATCHVER:=5.15/PATCHVER:=5.10/g' target/linux/rockchip/Makefile
 
 # 添加软件源
 echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
