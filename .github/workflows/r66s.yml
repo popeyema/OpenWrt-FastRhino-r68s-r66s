@@ -18,6 +18,10 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
+        
+# 定时触发编译(每月1日早3点)
+#  schedule:
+#    - cron: 0 19 1 * *
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
