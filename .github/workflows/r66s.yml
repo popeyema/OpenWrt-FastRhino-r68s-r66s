@@ -64,14 +64,14 @@ jobs:
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
 
-    - name: 克隆源代码
+    - name: 下载源代码
       working-directory: /workdir
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
-    - name: Load custom feeds
+    - name: 加载自定义源码
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
         chmod +x $DIY_P1_SH
@@ -111,9 +111,9 @@ jobs:
 
         ZZZ="package/lean/default-settings/files/zzz-default-settings"
         echo "DISTRIB_REVISION=$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')" >> $GITHUB_ENV
-        echo "KERNEL_PATCHVER=$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')" >> $GITHUB_ENV
+        echo "KERNEL_PATCHVER=$(cat target/linux/rockchip/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')" >> $GITHUB_ENV
         echo "	    当前编译版本：$(cat $ZZZ|grep DISTRIB_REVISION= | sed 's/^.\{24\}//g' | sed 's/.\{26\}$//')"
-        echo "	    内核版本：$(cat target/linux/x86/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')"
+        echo "	    内核版本：$(cat target/linux/rockchip/Makefile|grep KERNEL_PATCHVER | sed 's/^.\{17\}//g')"
 
         echo
         echo "=========================================="
@@ -174,13 +174,6 @@ jobs:
         du -h --max-depth=1 openwrt/ --exclude=build_dir --exclude=bin
         du -h --max-depth=1 openwrt/build_dir
         du -h --max-depth=1 openwrt/bin
-
-    - name: Upload bin directory
-      uses: actions/upload-artifact@main
-      if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
-      with:
-        name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: openwrt/bin
 
     - name: 整理固件文件
       id: organize
