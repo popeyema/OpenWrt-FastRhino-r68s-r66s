@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
+    - name: 准备完成
       uses: actions/checkout@main
 
     - name: 初始化系统环境
