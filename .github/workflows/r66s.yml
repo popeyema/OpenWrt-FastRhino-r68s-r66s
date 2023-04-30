@@ -199,9 +199,9 @@ jobs:
         echo "release_date=$(date +"%Y.%m.%d")" >> $GITHUB_OUTPUT
         touch release.txt
         echo "
-        🎉 版本：${{ env.DISTRIB_REVISION }}
-        🎈 核版本：${{ env.KERNEL_PATCHVER }}
-        🖥  地址：192.168.1.1 
+        🎉 编译版本：${{ env.DISTRIB_REVISION }}
+        🎈 内核版本：${{ env.KERNEL_PATCHVER }}
+        🖥  管理地址：192.168.1.1 
         ⏰ 名称：root
         🛠  密码：password" >> release.txt
         echo "status=success" >> $GITHUB_OUTPUT
