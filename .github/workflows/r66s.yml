@@ -217,6 +217,10 @@ jobs:
         echo "release_date=$(date +"%Y.%m.%d")" >> $GITHUB_OUTPUT
         touch release.txt
         echo "
+        ★ 源码 : https://github.com/coolsnowwolf/lede
+        ★ 分支 : master
+        ★ 感谢源码作者无私分享！
+        
         🎉 编译版本：${{ env.DISTRIB_REVISION }}
         
         🎈 内核版本：${{ env.KERNEL_PATCHVER }}
