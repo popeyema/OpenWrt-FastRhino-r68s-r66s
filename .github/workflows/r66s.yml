@@ -228,14 +228,14 @@ jobs:
     - name: 删除运行记录
       uses: Mattraks/delete-workflow-runs@v2
       with:
-        retain_days: 1     #保留最后多少记录不删除
-        keep_minimum_runs: 3
+        retain_days: 5     #保留最后多少记录不删除
+        keep_minimum_runs: 0
 
     - name: 删除自动发布的旧固件
       uses: dev-drprasad/delete-older-releases@v0.2.1
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
-        keep_latest: 3        #保留多少个releases不删除
+        keep_latest: 5        #保留多少个releases不删除
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
