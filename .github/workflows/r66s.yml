@@ -200,10 +200,18 @@ jobs:
         touch release.txt
         echo "
         🎉 编译版本：${{ env.DISTRIB_REVISION }}
+        
         🎈 内核版本：${{ env.KERNEL_PATCHVER }}
-        🖥  管理地址：192.168.1.1 
-        ⏰ 名称：root
-        🛠  密码：password" >> release.txt
+        
+        ⏰ 编译时间：${{ env.FILE_TIME1 }}
+        
+        ⛄ 编译用时：${{ env.BUILD_TIME }}
+        
+        🖥 管理地址：192.168.1.1 
+        
+        🌴 名称：root
+        
+        🛠 密码：password" >> release.txt
         echo "status=success" >> $GITHUB_OUTPUT
     
     - name: 自动发布固件到 Releases
