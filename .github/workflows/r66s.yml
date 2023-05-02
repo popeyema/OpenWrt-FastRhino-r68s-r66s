@@ -214,11 +214,11 @@ jobs:
         ★ 分支 : master
         ★ 感谢源码作者无私分享！
         
-        🎉 编译版本：${{ env.DISTRIB_REVISION }}
+        ⏰ 编译时间：${{ env.FILE_TIME1 }}
         
         🎈 内核版本：${{ env.KERNEL_PATCHVER }}
         
-        ⏰ 编译时间：${{ env.FILE_TIME1 }}
+        🎉 编译版本：${{ env.DISTRIB_REVISION }}
         
         🖥 管理地址：192.168.1.1 
         
