@@ -7,8 +7,8 @@
 ![1](https://user-images.githubusercontent.com/83998087/215268469-993b739d-572a-4b74-827f-6b461ea22560.jpg)
 
 
-![2](https://github.com/popeyema/OpenWrt-R66s/assets/83998087/c0bf4335-f4e2-4afa-b9a4-e91924aa9c11)
 
+![2](https://github.com/popeyema/OpenWrt-R66s/assets/83998087/80057560-c814-4ffc-a451-73da76c69dc3)
 
 
 
