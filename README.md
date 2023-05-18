@@ -6,26 +6,12 @@
  
 ![1](https://user-images.githubusercontent.com/83998087/215268469-993b739d-572a-4b74-827f-6b461ea22560.jpg)
 
+
 ![2](https://github.com/popeyema/OpenWrt-R66s/assets/83998087/c0bf4335-f4e2-4afa-b9a4-e91924aa9c11)
 
-==========================================
 
 
-	      已选插件列表
-	1、luci-app-diskman 
-	2、luci-app-netdata 
-	3、luci-app-ramfree 
-	4、luci-app-zerotier 
-	5、luci-app-bypass 
-	6、luci-app-passwall 
-	7、luci-app-ssr-plus 
-	8、luci-app-vssr 
-	9、luci-app-ttyd 
-	10、luci-app-usb-printer 
-	11、luci-app-smartdns 
-	12、luci-theme-argon 
 
-==========================================
 
 
 ##### 源码和脚本来自
