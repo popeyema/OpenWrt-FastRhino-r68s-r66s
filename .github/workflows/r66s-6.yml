@@ -82,7 +82,7 @@ jobs:
         START_TIME=`date +'%Y-%m-%d %H:%M:%S'`
         echo "START_SECONDS=$(date --date="$START_TIME" +%s)" >> $GITHUB_ENV
 
-    - name: 加载自定义源码
+    - name: patch1补丁和自定义设置
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
         chmod +x $DIY_P1_SH
@@ -95,7 +95,7 @@ jobs:
     - name: 安装源 #Install feeds
       run: cd openwrt && ./scripts/feeds install -a
 
-    - name: 加载自定义配置
+    - name: patch2补丁和自定义设置
       run: |
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
