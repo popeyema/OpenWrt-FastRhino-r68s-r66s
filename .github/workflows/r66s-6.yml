@@ -209,7 +209,7 @@ jobs:
         
         ⏰ 编译时间：${{ env.FILE_TIME1 }}
         
-        🎈 内核版本：${{ env.KERNEL_PATCHVER }}
+        🎈 内核版本：${{ env.KERNEL_VERSION }}
         
         🎉 编译版本：${{ env.DISTRIB_REVISION }}
         
