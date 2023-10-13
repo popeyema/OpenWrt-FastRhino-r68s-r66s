@@ -201,6 +201,12 @@ jobs:
       with:
         name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: ${{ env.FIRMWARE }}
+    
+    - name: 获取内核版本号
+      run: |
+         cd openwrt/bin/targets/rockchip/armv8
+         KERNEL_VERSION=$(ls -l *openwrt-rockchip-armv8-generic-kernel.bin | awk '{print $9}' | cut -d '-' -f1)
+         echo "KERNEL_VERSION=$KERNEL_VERSION" >> $GITHUB_ENV
 
     - name: 生成发布标签
       id: tag
@@ -208,7 +214,6 @@ jobs:
       run: |
         echo "release_tag=$(date +"%Y.%m.%d")-Lean" >> $GITHUB_OUTPUT
         echo "release_date=$(date +"%Y.%m.%d")" >> $GITHUB_OUTPUT
-        echo "**:ice_cube: R66S**|**$(sed -n '2p' $GITHUB_WORKSPACE/openwrt/include/kernel-${kernel_rockchip} | awk -F '-' '{print $2}' | awk -F ' =' '{print $1}')**|![](https://img.shields.io/badge/build-in_progress_or_waiting.....-yellow?logo=githubactions&logoColor=yellow&style=flat-square)" >> release.txt
         touch release.txt
         echo "
         ★ 源码 : https://github.com/coolsnowwolf/lede
