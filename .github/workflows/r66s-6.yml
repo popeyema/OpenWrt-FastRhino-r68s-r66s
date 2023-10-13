@@ -208,6 +208,7 @@ jobs:
       run: |
         echo "release_tag=$(date +"%Y.%m.%d")-Lean" >> $GITHUB_OUTPUT
         echo "release_date=$(date +"%Y.%m.%d")" >> $GITHUB_OUTPUT
+        echo "**:ice_cube: R66S**|**$(sed -n '2p' $GITHUB_WORKSPACE/openwrt/include/kernel-${kernel_rockchip} | awk -F '-' '{print $2}' | awk -F ' =' '{print $1}')**|![](https://img.shields.io/badge/build-in_progress_or_waiting.....-yellow?logo=githubactions&logoColor=yellow&style=flat-square)" >> release.txt
         touch release.txt
         echo "
         ★ 源码 : https://github.com/coolsnowwolf/lede
@@ -216,7 +217,7 @@ jobs:
         
         ⏰ 编译时间：${{ env.FILE_TIME1 }}
         
-        🎈 内核版本：${{ env.KERNEL_VERSION }}
+        🎈 内核版本：${{ env.KERNEL_PATCHVER }}
         
         🎉 编译版本：${{ env.DISTRIB_REVISION }}
         
