@@ -27,9 +27,9 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: 5.15/config/r66s.config
-  DIY_P1_SH: 5.15/diy-part1.sh
-  DIY_P2_SH: 5.15/diy-part2.sh
+  CONFIG_FILE: r66s/5.15/config/r66s.config
+  DIY_P1_SH: r66s/5.15/diy-part1.sh
+  DIY_P2_SH: r66s/5.15/diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
