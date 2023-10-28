@@ -232,7 +232,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
       with:
-        name: ${{ steps.tag.outputs.release_date }} FastRhino-R66S-linux-固件下载
+        name: ${{ steps.tag.outputs.release_date }} FastRhino-R68S-linux-固件下载
         tag_name: ${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
         files: ${{ env.FIRMWARE }}/*
