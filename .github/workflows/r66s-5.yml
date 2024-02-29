@@ -258,8 +258,7 @@ jobs:
     
     - name: 自动发布固件到 Releases
       uses: softprops/action-gh-release@master
-      continue-on-error: true
-      if: env.REPO_TOKEN && env.UPLOAD_FIRMWARE_FOR_RELEASE == 'true'
+      if: steps.tag.outputs.status == 'success' && !cancelled()
       env:
         GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
       with:
@@ -269,7 +268,7 @@ jobs:
         files: ${{ env.FIRMWARE }}/*
 
     - name: 删除运行记录
-      uses: GitRML/delete-workflow-runs@main
+      uses: Mattraks/delete-workflow-runs@main
       continue-on-error: true
       with:
         retain_days: 3     #保留最后多少记录不删除
