@@ -112,11 +112,18 @@ jobs:
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: 获取内核版本号
-      id: kernel_version
       run: |
+        echo "检查目录和文件..."
+        ls $GITHUB_WORKSPACE/openwrt/include/  # 调试用：列出目录内容
+        echo "尝试读取 kernel-version.mk 文件内容..."
+        cat $GITHUB_WORKSPACE/openwrt/include/kernel-version.mk  # 调试用：输出文件内容
+        echo "获取内核版本号..."
         KERNEL_VERSION=$(cat $GITHUB_WORKSPACE/openwrt/include/kernel-version.mk | grep LINUX_VERSION- | head -n 1 | awk '{ print $3 }')
-        echo "内核版本号为: $KERNEL_VERSION"
-        echo "KERNEL_VERSION=$KERNEL_VERSION" >> $GITHUB_ENV
+        if [ -z "$KERNEL_VERSION" ]; then
+          echo "未能获取内核版本号，请检查路径和文件内容。"
+        else
+          echo "内核版本号为: $KERNEL_VERSION"
+          echo "KERNEL_VERSION=$KERNEL_VERSION" >> $GITHUB_ENV
 
     - name: 加载自定义源码
       run: |
