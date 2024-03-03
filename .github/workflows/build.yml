@@ -1,0 +1,252 @@
+  build-Image:
+    runs-on: ubuntu-latest
+    needs:  [planning,prepare,build1,build-package,build-Image_Builder]
+    strategy:
+      matrix: ${{ fromJSON(needs.planning.outputs.matrix) }}
+    name: build-Image-${{ matrix.config }}
+    steps:
+      - name: 将存储库签出到运行器
+        uses: actions/checkout@v4
+
+      - name: 输出运行器硬件信息
+        run: |
+          bash $GITHUB_WORKSPACE/scripts/hardware_info.sh
+
+      - name: 清理空间
+        run: |
+          bash $GITHUB_WORKSPACE/scripts/clear_space.sh
+
+      - name: 安装编译依赖
+        run: |
+          bash $GITHUB_WORKSPACE/scripts/install_compilation_dependencies.sh
+
+      - name: 合并磁盘
+        run: |
+          bash $GITHUB_WORKSPACE/scripts/merge_disk.sh
+
+      - name: 将存储库签出到运行器
+        uses: actions/checkout@v4
+
+      - name: 下载Image Builder
+        uses: actions/download-artifact@v4
+        with:
+          name: OpenWrt-Image_Builder-${{ matrix.config }}
+
+      - name: 下载包
+        uses: actions/download-artifact@v4
+        with:
+          name: OpenWrt-package-${{ matrix.config }}
+          path: ${{ github.workspace }}/package/
+
+      - name: 下载build1配置文件
+        uses: actions/download-artifact@v4
+        with:
+          name: build1_openwrt_config-${{ matrix.config }}
+
+      - name: 下载 files
+        uses: actions/download-artifact@v4
+        with:
+          name: build1_openwrt_files-${{ matrix.config }}
+
+      - name: 建立日志文件夹
+        run: |
+          cd $GITHUB_WORKSPACE
+          mkdir -p log
+          cd log
+          export LOG_PATH="$(pwd)"
+          echo "LOG_PATH=$LOG_PATH" >> $GITHUB_ENV
+
+      - name: 解压
+        run: |
+          tar -xvJf openwrt-imagebuilder-${{ matrix.target }}-${{ matrix.subtarget }}.Linux-x86_64.tar.xz
+          cd openwrt-imagebuilder-${{ matrix.target }}-${{ matrix.subtarget }}.Linux-x86_64
+          export IMAGE_BUILDER_ROOT_PATH="$(pwd)"
+          echo "IMAGE_BUILDER_ROOT_PATH=$IMAGE_BUILDER_ROOT_PATH" >> $GITHUB_ENV
+          mkdir -p $IMAGE_BUILDER_ROOT_PATH/files
+          cd $GITHUB_WORKSPACE
+          tar xvpfz $GITHUB_WORKSPACE/openwrt_files.tgz  -C $IMAGE_BUILDER_ROOT_PATH/files
+
+      - name: 环境变量
+        run: env
+
+      - name: 复制package到build-Image_Builder
+        run: |
+          cd $GITHUB_WORKSPACE/package/
+          rm -rf $(ls $IMAGE_BUILDER_ROOT_PATH/packages)
+          rm -rf kernel_*
+          cd $GITHUB_WORKSPACE
+          cp $GITHUB_WORKSPACE/package/* $IMAGE_BUILDER_ROOT_PATH/packages/
+
+      - name: 制作包列表
+        run: sed -n "/^CONFIG_PACKAGE_[-a-zA-Z0-9]\{1,99\}=y$/p" build1.config | sed -e "s/CONFIG_PACKAGE_//g" -e "s/=y//g" | sed ':label;N;s/\n/ /;b label' > package.list
+
+      - name: 覆盖配置文件
+        run: |
+          rm -rf $IMAGE_BUILDER_ROOT_PATH/.config
+          cat build1.config > $IMAGE_BUILDER_ROOT_PATH/.config
+
+      - name: 镜像信息
+        working-directory: ${{ env.IMAGE_BUILDER_ROOT_PATH }}
+        run: |
+          echo "可用目标配置文件的列表"
+          make info
+          echo "安装的包列表"
+          make manifest PACKAGES="$(cat $GITHUB_WORKSPACE/package.list)"
+
+      - name: 构建镜像
+        working-directory: ${{ env.IMAGE_BUILDER_ROOT_PATH }}
+        run: |
+          make image FILES="$IMAGE_BUILDER_ROOT_PATH/files" PACKAGES="$(cat $GITHUB_WORKSPACE/package.list)"
+          echo "======================="
+          echo "空间使用情况:"
+          echo "======================="
+          df --total  -Th
+          echo "======================="
+          du -h --max-depth=1 ./ --exclude=bin
+          du -h --max-depth=1 ./bin
+
+      - name: 准备 artifact
+        working-directory: ${{ env.IMAGE_BUILDER_ROOT_PATH }}
+        run: |
+          mkdir -p ./artifact/buildinfo
+          echo "artifact-/bin" >> $LOG_PATH/cmzj_package.log
+          ls -l ./bin/targets/${{ matrix.target }}/${{ matrix.subtarget }}/** >> $LOG_PATH/Image_Builder-bin.log
+          cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
+
+      - name: 上传 firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: OpenWrt-firmware-${{ matrix.config }}
+          path: ${{ env.IMAGE_BUILDER_ROOT_PATH }}/bin/targets/
+
+      - name: 上传 buildinfo
+        uses: actions/upload-artifact@v4
+        with:
+          name: OpenWrt-buildinfo-${{ matrix.config }}
+          path: ${{ env.IMAGE_BUILDER_ROOT_PATH }}/artifact/buildinfo/
+
+      - name: 收集日志
+        if: success() || failure()
+        run: |
+          mkdir -p $LOG_PATH/openwrt-logs
+          cp -r $IMAGE_BUILDER_ROOT_PATH/logs $LOG_PATH/openwrt-logs || echo "没有openwrt/logs"
+          cp $IMAGE_BUILDER_ROOT_PATH/.config $LOG_PATH/openwrt.config || echo "没有openwrt/.config"
+
+      - name: 上传日志
+        if: success() || failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-Image-${{ matrix.target }}-${{ matrix.subtarget }}-logs
+          path: "${{ env.LOG_PATH }}"
+
+  upload:
+    needs: [planning,prepare,build1,build-package,build-Image_Builder,build-Image]
+    strategy:
+      matrix: ${{ fromJSON(needs.planning.outputs.matrix) }}
+    name: upload-${{ matrix.config }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: 将存储库签出到运行器
+        uses: actions/checkout@v4
+
+      - name: 建立工作文件夹
+        run: |
+          cd $GITHUB_WORKSPACE
+          mkdir -p upload packagecompare
+          export UPLOAD_ROOT_PATH="$(pwd)/upload"
+          export PACKAGECOMPARE_ROOT_PATH="$(pwd)/packagecompare"
+          echo "UPLOAD_ROOT_PATH=$UPLOAD_ROOT_PATH" >> $GITHUB_ENV
+          echo "PACKAGECOMPARE_ROOT_PATH=$PACKAGECOMPARE_ROOT_PATH" >> $GITHUB_ENV
+
+      - name: 初始化环境
+        run: |
+          sudo -E apt update
+          sudo -E apt install -y git aria2 zip bzip2 curl rsync unzip wget || sudo -E apt install -y git aria2 zip bzip2 curl rsync unzip wget
+          sudo timedatectl set-timezone "Asia/Shanghai"
+
+      - name: 生成 release 所需变量
+        working-directory: ${{ env.UPLOAD_ROOT_PATH }}
+        run: |
+          export OPENWRT_TAG_BRANCH="$(sed -n '/openwrt_tag\/branch/p' $GITHUB_WORKSPACE/config/${{ matrix.config }}/OpenWrt-K/compile.config | sed -e 's/.*=//')"
+          echo "OPENWRT_TAG_BRANCH=$OPENWRT_TAG_BRANCH" >> $GITHUB_ENV
+          export RELEASE_NAME="OpenWrt-K_V${{ needs.planning.outputs.starttime }} (${{ matrix.target }}-${{ matrix.subtarget }})-[$OPENWRT_TAG_BRANCH]"
+          echo "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_ENV
+          export RELEASE_TAG_NAME="v${{ needs.planning.outputs.starttime }}(${{ matrix.target }}-${{ matrix.subtarget }})-($OPENWRT_TAG_BRANCH)"
+          echo "RELEASE_TAG_NAME=$RELEASE_TAG_NAME" >> $GITHUB_ENV
+
+      - name: 下载固件
+        uses: actions/download-artifact@v4
+        with:
+          name: OpenWrt-firmware-${{ matrix.config }}
+          path: ${{ env.UPLOAD_ROOT_PATH }}
+
+      - name: 下载包
+        uses: actions/download-artifact@v4
+        with:
+          name: OpenWrt-package-${{ matrix.config }}
+          path: ${{ env.UPLOAD_ROOT_PATH }}/package
+
+      - name: 下载内核模块
+        uses: actions/download-artifact@v4
+        with:
+          name: OpenWrt-kmod-${{ matrix.config }}
+          path: ${{ env.UPLOAD_ROOT_PATH }}/kmod
+
+      - name: 整理包
+        working-directory: ${{ env.UPLOAD_ROOT_PATH }}
+        run: |
+          mkdir package-upload
+          zip -r ./package-upload/package.zip package
+          zip -r ./package-upload/allkmod.zip kmod
+
+      - name: 整理包生成 release body
+        run: |
+          echo 编译完成于$(date +"%Y-%m-%d %H:%M") >> $UPLOAD_ROOT_PATH/release.txt
+          echo "编译的openwrt版本/分支: " $OPENWRT_TAG_BRANCH >> $UPLOAD_ROOT_PATH/release.txt
+          echo "编译使用的配置: " ${{ matrix.config }} >> $UPLOAD_ROOT_PATH/release.txt
+          latest_ver="$(curl -s -L --retry 6 https://api.github.com/repos/${{ github.repository }}/releases 2>/dev/null | grep -E 'tag_name' | grep -E '(${{ matrix.target }}-${{ matrix.subtarget }})' | grep -E "($OPENWRT_TAG_BRANCH)" | sed -e 's/    "tag_name": "//' -e 's/",//' | sed -n '1p')"
+          echo latest_ver=$latest_ver
+          rm -rf $PACKAGECOMPARE_ROOT_PATH/*
+          curl -s -L --retry 6 https://github.com/${{ github.repository }}/releases/download/${latest_ver}/allkmod.zip -o $PACKAGECOMPARE_ROOT_PATH/allkmod.zip -nv  || exit 0
+          curl -s -L --retry 6 https://github.com/${{ github.repository }}/releases/download/${latest_ver}/package.zip -o $PACKAGECOMPARE_ROOT_PATH/package.zip -nv  || exit 0
+          cd $PACKAGECOMPARE_ROOT_PATH
+          unzip package.zip || exit 0
+          unzip allkmod.zip || exit 0
+          mv package oldpackage
+          mv kmod oldkmod
+          cp -rf oldkmod/* oldpackage/
+          ls $PACKAGECOMPARE_ROOT_PATH/oldpackage/|sort| uniq >oldpackage.list
+          sed -i -e "s/_${{ matrix.targetarchpackages }}.ipk//g" -e "s/_all.ipk//g" oldpackage.list
+          rm -rf $PACKAGECOMPARE_ROOT_PATH/package.zip $PACKAGECOMPARE_ROOT_PATH/allkmod.zip
+          cp -f $UPLOAD_ROOT_PATH/package-upload/package.zip $PACKAGECOMPARE_ROOT_PATH/package.zip
+          cp -f $UPLOAD_ROOT_PATH/package-upload/allkmod.zip $PACKAGECOMPARE_ROOT_PATH/allkmod.zip
+          unzip package.zip
+          unzip allkmod.zip
+          mv package newpackage
+          mv kmod newkmod
+          cp -rf newkmod/* newpackage/
+          ls $PACKAGECOMPARE_ROOT_PATH/newpackage/|sort| uniq >newpackage.list
+          sed -i -e "s/_${{ matrix.targetarchpackages }}.ipk//g" -e "s/_all.ipk//g" newpackage.list && echo "list complete"
+          echo "内核版本: "$(sed -n '/kernel_/p' newpackage.list | sed -e 's/kernel_//') >> $UPLOAD_ROOT_PATH/release.txt
+          echo "包更改/版本升级列表" >> $UPLOAD_ROOT_PATH/release.txt
+          diff oldpackage.list newpackage.list -y -B -b |grep -E '[\|><]' >diff.temp && echo "Compare complete" || echo "没有包新增删除或版本升级" >> $UPLOAD_ROOT_PATH/release.txt
+          sed -e "/</s/^/delete:/g" -e "/|/s/^/update:/g" -e "/>/s/^/Add:/g" -e 's/[[:space:]]//g' -e 's/<//g' -e 's/>//g' -e 's/|/ > /g' -e 's/> [a-zA-Z0-9\-]*_/> /g' -e 's/_/ /g' diff.temp >> $UPLOAD_ROOT_PATH/release.txt || echo "没有包新增删除或版本升级"
+
+      - name: 上传固件到 Release
+        id: firmware-release
+        uses: softprops/action-gh-release@master
+        with:
+          name: ${{ env.RELEASE_NAME }}
+          tag_name: ${{ env.RELEASE_TAG_NAME }}
+          files: |
+            ${{ env.UPLOAD_ROOT_PATH }}/${{ matrix.target }}/${{ matrix.subtarget }}/*
+            ${{ env.UPLOAD_ROOT_PATH }}/package-upload/*
+          body_path: ${{ env.UPLOAD_ROOT_PATH }}/release.txt
+
+      - name: 删除旧的Releases
+        uses: dev-drprasad/delete-older-releases@v0.3.2
+        with:
+          keep_latest: 10
+          delete_tags: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
