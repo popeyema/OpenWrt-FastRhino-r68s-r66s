@@ -236,8 +236,8 @@ jobs:
       run: |
         echo "release_tag=$(date +"%Y.%m.%d")-Lean" >> $GITHUB_OUTPUT
         echo "release_date=$(date +"%Y.%m.%d")" >> $GITHUB_OUTPUT
-        echo "编译的openwrt版本/分支: " $OPENWRT_TAG_BRANCH >> $UPLOAD_ROOT_PATH/release.txt
-        echo "内核版本: "$(sed -n '/kernel_/p' newpackage.list | sed -e 's/kernel_//') >> $UPLOAD_ROOT_PATH/release.txt
+        echo "编译的openwrt版本/分支: " $OPENWRT_TAG_BRANCH >>  $GITHUB_OUTPUT
+        echo "内核版本: "$(sed -n '/kernel_/p' newpackage.list | sed -e 's/kernel_//') >> $GITHUB_OUTPUT
         touch release.txt
         echo "
         ★ 源码 : https://github.com/coolsnowwolf/lede
