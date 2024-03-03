@@ -111,6 +111,13 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
+    - name: 获取内核版本号
+      id: kernel_version
+      run: |
+        KERNEL_VERSION=$(cat $GITHUB_WORKSPACE/openwrt/include/kernel-version.mk | grep LINUX_VERSION- | head -n 1 | awk '{ print $3 }')
+        echo "内核版本号为: $KERNEL_VERSION"
+        echo "KERNEL_VERSION=$KERNEL_VERSION" >> $GITHUB_ENV
+
     - name: 加载自定义源码
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
@@ -231,12 +238,6 @@ jobs:
         name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: ${{ env.FIRMWARE }}
 
-    - name: 获取内核版本号
-      run: |
-        cd openwrt/bin/targets/rockchip/armv8
-        KERNEL_VERSION=$(ls openwrt-rockchip-armv8-*kernel*.bin | sed 's/openwrt-rockchip-armv8-generic-kernel.bin-//; s/.bin$//' | head -n 1)
-        echo "KERNEL_VERSION=$KERNEL_VERSION" >> $GITHUB_ENV
-
     - name: 生成发布标签
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
@@ -251,7 +252,7 @@ jobs:
         
         ⏰ 编译时间：${{ env.FILE_TIME1 }}
         
-        🎈 内核版本：${{ env.KERNEL_PATCHVER }}
+        🎈 内核版本：${{ env.KERNEL_VERSION }}
         
         🎉 编译版本：${{ env.DISTRIB_REVISION }}
         
