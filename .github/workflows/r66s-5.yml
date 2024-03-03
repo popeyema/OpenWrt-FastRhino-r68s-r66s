@@ -124,7 +124,8 @@ jobs:
         else
           echo "内核版本号为: $KERNEL_VERSION"
           echo "KERNEL_VERSION=$KERNEL_VERSION" >> $GITHUB_ENV
-
+          fi  # 添加缺失的 fi 来结束 if 块
+        
     - name: 加载自定义源码
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
