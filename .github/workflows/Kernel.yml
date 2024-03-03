@@ -1,0 +1,28 @@
+name: Extract and Display Kernel Version
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Extract and Display Kernel Version
+      run: |
+        FIRMWARE_PATH="/home/runner/work/OpenWrt-FastRhino-r68s-r66s/OpenWrt-FastRhino-r68s-r66s/openwrt/bin/targets/rockchip/armv8/openwrt-rockchip-armv8-fastrhino_r68s.manifest"
+        
+        # Check if the directory exists before using it
+        if [ -d "$(dirname $FIRMWARE_PATH)" ]; then
+          KERNEL_VERSION=$(basename $FIRMWARE_PATH | cut -d'-' -f1)
+          echo "KERNEL_VERSION=$KERNEL_VERSION" >> $GITHUB_ENV
+          echo "Extracted Kernel Version is $KERNEL_VERSION"
+        else
+          echo "Directory does not exist: $(dirname $FIRMWARE_PATH)"
+          exit 1
+        fi
