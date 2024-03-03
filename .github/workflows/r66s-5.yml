@@ -231,6 +231,12 @@ jobs:
         name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: ${{ env.FIRMWARE }}
 
+    - name: 获取内核版本号
+      run: |
+        cd openwrt/bin/targets/rockchip/armv8
+        KERNEL_VERSION=$(ls openwrt-rockchip-armv8-*kernel*.bin | sed 's/openwrt-rockchip-armv8-generic-kernel.bin-//; s/.bin$//' | head -n 1)
+        echo "KERNEL_VERSION=$KERNEL_VERSION" >> $GITHUB_ENV
+
     - name: 生成发布标签
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
