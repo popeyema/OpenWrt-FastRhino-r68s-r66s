@@ -110,22 +110,7 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-
-    - name: 获取内核版本号
-      run: |
-        echo "检查目录和文件..."
-        ls $GITHUB_WORKSPACE/openwrt/include/  # 调试用：列出目录内容
-        echo "尝试读取 kernel-version.mk 文件内容..."
-        cat $GITHUB_WORKSPACE/openwrt/include/kernel-version.mk  # 调试用：输出文件内容
-        echo "获取内核版本号..."
-        KERNEL_VERSION=$(cat $GITHUB_WORKSPACE/openwrt/include/kernel-version.mk | grep LINUX_VERSION- | head -n 1 | awk '{ print $3 }')
-        if [ -z "$KERNEL_VERSION" ]; then
-          echo "未能获取内核版本号，请检查路径和文件内容。"
-        else
-          echo "内核版本号为: $KERNEL_VERSION"
-          echo "KERNEL_VERSION=$KERNEL_VERSION" >> $GITHUB_ENV
-          fi  # 添加缺失的 fi 来结束 if 块
-        
+      
     - name: 加载自定义源码
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
@@ -248,9 +233,11 @@ jobs:
 
     - name: Extract Kernel Version
       run: |
-        FIRMWARE_PATH="/home/runner/work/OpenWrt-FastRhino-r68s-r66s/OpenWrt-FastRhino-r68s-r66s/openwrt/bin/targets/rockchip/armv8/openwrt-rockchip-armv8-fastrhino_r68s.manifest"
-        KERNEL_VERSION=$(basename $FIRMWARE_PATH | cut -d'-' -f1)
-        echo "KERNEL_VERSION=$KERNEL_VERSION" >> $GITHUB_ENV
+        # Example of extracting the kernel version from a compiled image name
+        # Adjust the path and filename pattern according to your build output
+        cd /home/runner/work/OpenWrt-FastRhino-r68s-r66s/OpenWrt-FastRhino-r68s-r66s/openwrt/bin/targets/rockchip/armv8/
+        KERNEL_VERSION=$(echo $(ls *-squashfs-sysupgrade.img.gz) | sed -r 's/.*-([0-9]+\.[0-9]+)\..*/\1/')
+        echo "KERNEL_VERSION=${KERNEL_VERSION}" >> $GITHUB_ENV
         
     - name: Display Kernel Version
       run: echo "Extracted Kernel Version is ${{ env.KERNEL_VERSION }}"
