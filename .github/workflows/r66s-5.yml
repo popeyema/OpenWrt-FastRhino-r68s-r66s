@@ -231,12 +231,18 @@ jobs:
         name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: ${{ env.FIRMWARE }}
 
-    - name: Extract Kernel Version
-      run: |
+    #- name: Extract Kernel Version
+     # run: |
         # Example of extracting the kernel version from a compiled image name
         # Adjust the path and filename pattern according to your build output
-        cd /home/runner/work/OpenWrt-FastRhino-r68s-r66s/OpenWrt-FastRhino-r68s-r66s/openwrt/bin/targets/rockchip/armv8/
-        KERNEL_VERSION=$(echo $(ls *-squashfs-sysupgrade.img.gz) | sed -r 's/.*-([0-9]+\.[0-9]+)\..*/\1/')
+        # cd /home/runner/work/OpenWrt-FastRhino-r68s-r66s/OpenWrt-FastRhino-r68s-r66s/openwrt/bin/targets/rockchip/armv8/
+        # KERNEL_VERSION=$(echo $(ls *-squashfs-sysupgrade.img.gz) | sed -r 's/.*-([0-9]+\.[0-9]+)\..*/\1/')
+        # echo "KERNEL_VERSION=${KERNEL_VERSION}" >> $GITHUB_ENV
+    - name: Get Kernel Version
+      id: kernel_version
+      run: |
+        KERNEL_VERSION=$(grep -oP 'KERNEL_VERSION:=\K[^ ]+' $GITHUB_WORKSPACE/openwrt/include/kernel-version.mk)
+        echo "::set-output name=kernel_version::$KERNEL_VERSION"
         echo "KERNEL_VERSION=${KERNEL_VERSION}" >> $GITHUB_ENV
         
     - name: Display Kernel Version
