@@ -24,7 +24,6 @@
 
 rm -rf feeds/packages/lang/golang
 git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
-./scripts/feeds install -a
 
 # 添加软件源
 echo 'src-git kenzo https://github.com/kenzok8/openwrt-packages' >>feeds.conf.default
