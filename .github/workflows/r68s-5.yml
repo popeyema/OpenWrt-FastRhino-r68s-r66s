@@ -123,6 +123,8 @@ jobs:
         cd openwrt
         ./scripts/feeds clean
         ./scripts/feeds update -a
+        rm -rf feeds/luci/applications/luci-app-mosdns
+        rm -rf feeds/packages/net/{alist,adguardhome,mosdns,smartdns}
 
     - name: 自定义操作 #Custom operations
       run: |
