@@ -19,6 +19,14 @@
 #rm -rf feeds/packages/lang/golang
 #git clone https://github.com/sbwml/packages_lang_golang -b 22.x feeds/packages/lang/golang
 
+
+
+# 添加软件源
+echo 'src-git kenzo https://github.com/kenzok8/openwrt-packages' >>feeds.conf.default
+echo 'src-git small https://github.com/kenzok8/small' >>feeds.conf.default
+#echo 'src-git helloworld https://github.com/sbwml/openwrt_helloworld' >>feeds.conf.default
+#echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
+
 # 更新 golang 1.22 版本
 #./scripts/feeds clean
 #./scripts/feeds update -a
@@ -34,12 +42,6 @@ rm -rf feeds/smpackage/luci-app-adguardhome
 rm -rf feeds/smpackage/luci-app-bypass
 rm -rf feeds/packages/lang/golang
 git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
-
-# 添加软件源
-echo 'src-git kenzo https://github.com/kenzok8/openwrt-packages' >>feeds.conf.default
-echo 'src-git small https://github.com/kenzok8/small' >>feeds.conf.default
-#echo 'src-git helloworld https://github.com/sbwml/openwrt_helloworld' >>feeds.conf.default
-#echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
 
 #echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
 #echo 'src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall-packages.git;main' >> "feeds.conf.default"
