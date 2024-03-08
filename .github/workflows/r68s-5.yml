@@ -118,13 +118,22 @@ jobs:
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P1_SH
 
-    - name: Update feeds
-      run: cd openwrt && ./scripts/feeds clean && ./scripts/feeds update -a
-           rm -rf feeds/packages/lang/golang
-           git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
+    - name: 更新源 #Update feeds
+      run: |
+        cd openwrt
+        ./scripts/feeds clean
+        ./scripts/feeds update -a
 
-    - name: Install feeds
-      run: cd openwrt && ./scripts/feeds install -a
+    - name: 自定义操作 #Custom operations
+      run: |
+        cd openwrt
+        rm -rf feeds/packages/lang/golang
+        git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
+
+    - name: 安装源 #Install feeds
+      run: |
+        cd openwrt
+        ./scripts/feeds install -a
 
     - name: 加载自定义配置
       run: |
