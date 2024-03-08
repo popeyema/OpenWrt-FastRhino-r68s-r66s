@@ -93,13 +93,6 @@ jobs:
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
 
-    - name: 下载源代码
-      working-directory: /workdir
-      run: |
-        df -hT $PWD
-        git clone $REPO_URL -b $REPO_BRANCH openwrt
-        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-
     - name: 更新时区、编译时间
       id: date
       run: |
@@ -110,6 +103,21 @@ jobs:
         echo "编译开始时间..."
         START_TIME=`date +'%Y-%m-%d %H:%M:%S'`
         echo "START_SECONDS=$(date --date="$START_TIME" +%s)" >> $GITHUB_ENV
+
+    - name: 下载源代码
+      working-directory: /workdir
+      run: |
+        df -hT $PWD
+        git clone $REPO_URL -b $REPO_BRANCH openwrt
+        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+
+    - name: 更新源 #Update feeds
+      run: |
+        cd openwrt
+        ./scripts/feeds clean
+        ./scripts/feeds update -a
+        rm -rf feeds/luci/applications/luci-app-mosdns
+        rm -rf feeds/packages/net/{alist,mosdns}
 
     - name: 加载自定义源码
       run: |
@@ -123,8 +131,6 @@ jobs:
         cd openwrt
         ./scripts/feeds clean
         ./scripts/feeds update -a
-        rm -rf feeds/luci/applications/luci-app-mosdns
-        rm -rf feeds/packages/net/{alist,adguardhome,mosdns,smartdns}
 
     - name: 自定义操作 #Custom operations
       run: |
