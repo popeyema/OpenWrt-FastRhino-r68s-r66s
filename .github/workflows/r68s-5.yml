@@ -111,14 +111,6 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
-    #- name: 更新源 #Update feeds
-    #  run: |
-    #    cd openwrt
-    #    ./scripts/feeds clean
-    #    ./scripts/feeds update -a
-    #    rm -rf feeds/luci/applications/luci-app-mosdns
-    #    rm -rf feeds/packages/net/{alist,mosdns}
-
     - name: 加载自定义源码
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
@@ -126,28 +118,11 @@ jobs:
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P1_SH
 
-    #- name: 更新源 #Update feeds
-    #  run: cd openwrt && ./scripts/feeds update -a
+    - name: 更新源 #Update feeds
+      run: cd openwrt && ./scripts/feeds update -a
 
-    #- name: 安装源 #Install feeds
-    #  run: cd openwrt && ./scripts/feeds install -a
-
-    #- name: 更新源 #Update feeds
-    #  run: |
-    #    cd openwrt
-    #    ./scripts/feeds clean
-    #    ./scripts/feeds update -a
-
-    #- name: 自定义操作 #Custom operations
-    #  run: |
-    #    cd openwrt
-    #    rm -rf feeds/packages/lang/golang
-    #    git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
-
-    #- name: 安装源 #Install feeds
-    #  run: |
-    #    cd openwrt
-    #    ./scripts/feeds install -a
+    - name: 安装源 #Install feeds
+      run: cd openwrt && ./scripts/feeds install -a
 
     - name: 加载自定义配置
       run: |
