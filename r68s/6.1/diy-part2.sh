@@ -18,7 +18,7 @@
 #uci set network.wan.username='yougotthisfromyour@isp.su'
 #uci set network.wan.password='yourpassword'
 
-# Modify fireware
+# 修改软件包
 chmod -R 755 files
 rm -rf feeds/luci/applications/luci-app-mosdns && rm -rf feeds/packages/net/{alist,adguardhome,smartdns}
 rm -rf feeds/smpackage/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
