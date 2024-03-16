@@ -18,6 +18,13 @@
 #uci set network.wan.username='yougotthisfromyour@isp.su'
 #uci set network.wan.password='yourpassword'
 
+# Modify fireware
+chmod -R 755 files
+rm -rf feeds/luci/applications/luci-app-mosdns && rm -rf feeds/packages/net/{alist,adguardhome,smartdns}
+rm -rf feeds/smpackage/{base-files,dnsmasq,firewall*,fullconenat,libnftnl,nftables,ppp,opkg,ucl,upx,vsftpd-alt,miniupnpd-iptables,wireless-regdb}
+rm -rf feeds/packages/lang/golang
+git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
+
 # 移除重复软件包
 rm -rf feeds/luci/themes/luci-theme-argon
 
