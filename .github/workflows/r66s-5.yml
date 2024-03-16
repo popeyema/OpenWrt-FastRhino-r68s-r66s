@@ -214,14 +214,6 @@ jobs:
         du -h --max-depth=1 openwrt/build_dir
         du -h --max-depth=1 openwrt/bin
 
-    - name: Package Armvirt as OpenWrt
-      uses: ophub/flippy-openwrt-actions@main
-      env:
-        OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*.img.gz
-        PACKAGE_SOC: rk3568
-        KERNEL_VERSION_NAME: ${{ env.KERNEL_VERSION }}
-        WHOAMI: popeyema
-
     - name: 整理固件文件
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
@@ -252,7 +244,7 @@ jobs:
         
         ⏰ 编译时间：${{ env.FILE_TIME1 }}
         
-        🎈 内核版本：${{ env.KERNEL_VERSION }}
+        🎈 内核版本：${{ env.KERNEL_PATCHVE }}
         
         🎉 编译版本：${{ env.DISTRIB_REVISION }}
         
