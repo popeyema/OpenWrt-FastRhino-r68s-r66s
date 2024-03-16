@@ -1,0 +1,17 @@
+#src-git kenzo https://github.com/kenzok8/openwrt-packages
+#src-git small https://github.com/kenzok8/small
+src-git smpackage https://github.com/kenzok8/small-package
+#src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall-packages
+#src-git passwall https://github.com/xiaorouji/openwrt-passwall
+#src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2
+#src-git openclash https://github.com/vernesong/OpenClash
+src-git packages https://github.com/coolsnowwolf/packages
+src-git luci https://github.com/coolsnowwolf/luci
+src-git routing https://github.com/coolsnowwolf/routing
+src-git telephony https://git.openwrt.org/feed/telephony.git
+#src-git helloworld https://github.com/fw876/helloworld
+#src-git oui https://github.com/zhaojh329/oui.git
+#src-git video https://github.com/openwrt/video.git
+#src-git targets https://github.com/openwrt/targets.git
+#src-git oldpackages http://git.openwrt.org/packages.git
+#src-link custom /usr/src/openwrt/custom-feed
