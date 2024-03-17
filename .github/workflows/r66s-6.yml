@@ -35,6 +35,7 @@ env:
   UPLOAD_RELEASE: true
   GITHUB_TOKEN: ${{ secrets.GIT_USER_TOKEN }}
   TZ: Asia/Shanghai
+  KERNEL_VERSION: 6.1.79
 
 jobs:
   build:
