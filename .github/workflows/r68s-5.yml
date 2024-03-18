@@ -265,7 +265,7 @@ jobs:
         name: ${{ steps.tag.outputs.release_date }} FastRhino-R68S-linux-固件下载
         tag_name: ${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
-        files: ${{ env.FIRMWARE }}/*
+        files: ${{ env.FIRMWARE }}/*.img.gz
 
     - name: 删除运行记录
       uses: Mattraks/delete-workflow-runs@main
