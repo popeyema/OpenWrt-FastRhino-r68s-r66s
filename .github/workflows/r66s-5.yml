@@ -213,12 +213,11 @@ jobs:
     - name: Package OpenWrt Firmware
       uses: ophub/flippy-openwrt-actions@main
       env:
-        OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*.tar.gz
-        PACKAGE_SOC: rk3568 r66s
-        KERNEL_VERSION_NAME: ${{ env.KERNEL_VERSION }}
-        KERNEL_AUTO_LATEST: true
-        WHOAMI: popeyema
-
+         OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*.tar.gz
+         PACKAGE_SOC: all
+         KERNEL_VERSION_NAME: ${{ env.KERNEL_VERSION }}
+         KERNEL_AUTO_LATEST: true
+      
     - name: 整理固件文件
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
