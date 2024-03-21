@@ -201,11 +201,12 @@ jobs:
         
     - name: 检查空间使用情况
       run: |
-        echo "======================="
-        echo "Space usage:"
-        echo "======================="
+        echo "=========================================="
+        echo "----------------空间使用-------------------"
+        echo "=========================================="
+        echo " 系统空间      类型   总数  已用  可用 使用率"
         df -hT
-        echo "======================="
+        echo "=========================================="
         du -h --max-depth=1 openwrt/ --exclude=build_dir --exclude=bin
         du -h --max-depth=1 openwrt/build_dir
         du -h --max-depth=1 openwrt/bin
