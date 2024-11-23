@@ -1,5 +1,6 @@
 
 # openwrt-FastRhino-r68s-r66s
+本人无时间维护，感谢！
 
 #### 基于OpenWrt-Actions-Lean自动化在线编译脚本  
 
